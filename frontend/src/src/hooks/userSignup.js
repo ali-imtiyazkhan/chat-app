@@ -26,17 +26,24 @@ const useSignup = () => {
   const {setAuthUser} = useAuthContext()
 
   const signup = async (fullName, username, password, confirmPassword, gender) => {
+    console.log("chechking inputs:", fullName, username, password, confirmPassword, gender);
     const isValid = handleInputErrors({ fullName, username, password, confirmPassword, gender });
-    if (!isValid) return;
-
+    if (!isValid)
+    {
+      console.log("Inputs are invalid") ;
+      return;
+    }
+    console.log("passed input check")
+console.log("reached in signup")
     try {
       setLoading(true);
-
-      const res = await fetch("http://localhost:5000/api/auth/signup", {
+console.log("sendig request:")
+      const res = await fetch("http://localhost:4000/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           fullname: fullName,
           username,
