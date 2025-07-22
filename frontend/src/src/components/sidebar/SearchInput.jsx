@@ -1,6 +1,8 @@
 import { MessageSquare, Users, Settings, LogOut, Search } from 'lucide-react';
+import useLogout from '../../hooks/userLogOut';
 
 const SearchInput = () => {
+   const { logout, loading } = useLogout() ;
   return (
     <div className="flex flex-col items-start text-white">
       <h2 className="text-2xl font-bold mb-4">Chats</h2>
@@ -32,9 +34,14 @@ const SearchInput = () => {
       </ul>
 
       {/* Logout */}
-      <div className="mt-6 flex items-center gap-2 text-red-500 hover:text-red-700 font-medium cursor-pointer">
+      <div
+        onClick={logout}
+        className={`mt-6 flex items-center gap-2 font-medium cursor-pointer transition-colors ${
+          loading ? 'text-gray-500 cursor-not-allowed' : 'text-red-500 hover:text-red-700'
+        }`}
+      >
         <LogOut className="w-5 h-5" />
-        <span>Logout</span>
+        <span>{loading ? 'Logging out...' : 'Logout'}</span>
       </div>
     </div>
   );

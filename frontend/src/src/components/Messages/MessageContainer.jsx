@@ -13,9 +13,9 @@ const MessageContainer = () => {
   return (
     <div className="md:min-w-[450px] flex flex-col h-screen ">
       {/* Header */}
-      <div className="bg-slate-700 px-4 py-3 border-b border-gray-600">
+      <div className=" px-4 py-3 border-b  border-gray-600">
         <span className="text-sm text-gray-400">To</span>{" "}
-        <span className="text-white font-semibold">John Doe</span>
+        <span className="text-white font-semibold"><h1>John Doe</h1></span>
       </div>
 
       {/* Messages */}
