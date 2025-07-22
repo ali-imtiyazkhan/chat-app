@@ -11,7 +11,7 @@ const useGetConversation = () => {
             const toastId = toast.loading("Fetching conversations...");
 
             try {
-                const res = await fetch("http://localhost:5000/api/users", {
+                const res = await fetch("http://localhost:4000/api/users", {
                     method: "GET",
                     credentials: "include",
                     headers: {
@@ -27,7 +27,9 @@ const useGetConversation = () => {
                 }
 
                 const data = await res.json();
-                setConversations(data);
+                setConversations(data); 
+                console.log("data: ",data);
+                console.log("conversations: ", conversations)
                 toast.success("Conversations loaded");
             } catch (error) {
                 if (error.message === "Unauthorized") {

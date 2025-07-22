@@ -12,7 +12,7 @@ import connectToMongoose from "./db/connectToMongoDB.js";
 const app = express();
 dotenv.config();
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 
 // ✅ Setup CORS middleware
 app.use(cors({

@@ -8,10 +8,8 @@ export const getuserForsidebar = async (req, res) => {
       "-password"
     );
 
-    res.status(200).json({
-      success: true,
-      users,
-    });
+    res.status(200).json(users);
+
   } catch (error) {
     console.error("Error in getuserForsidebar:", error.message);
     res.status(500).json({

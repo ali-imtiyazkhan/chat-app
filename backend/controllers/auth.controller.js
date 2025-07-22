@@ -39,7 +39,6 @@ export const login = async (req, res) => {
 export const signup = async (req, res) => {
     try {
         const { fullname, username, password, confirmpassword, gender } = req.body;
-
         if (password !== confirmpassword) {
             return res.status(400).json({ error: "Passwords don't match" });
         }
@@ -62,9 +61,7 @@ export const signup = async (req, res) => {
             gender,
             profilePic: gender === "male" ? boyProfilePic : girlProfilePic,
         });
-
         await newUser.save();
-
         // 🔐 Set JWT token in HTTP-only cookie
         generateTokenAndCookie(newUser._id, res);
 

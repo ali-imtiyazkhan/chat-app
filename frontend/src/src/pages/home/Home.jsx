@@ -5,10 +5,7 @@ import MessageContainer from '../../components/Messages/MessageContainer';
 const Home = () => {
   return (
     <div className="h-screen w-screen flex text-white">
-      {/* Sidebar on the left */}
       <Sidebar />
-
-    
       <div className="flex-1 p-6 -mt-7">
         <MessageContainer />
       </div>
