@@ -2,55 +2,45 @@ import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
 const useGetConversation = () => {
-    const [loading, setLoading] = useState(false);
-    const [conversations, setConversations] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [conversations, setConversations] = useState([]);
 
-    useEffect(() => {
-        const getConversation = async () => {
-            setLoading(true);
-            const toastId = toast.loading("Fetching conversations...");
+  useEffect(() => {
+    const getConversation = async () => {
+      setLoading(true);
 
-            try {
-                const res = await fetch("http://localhost:4000/api/users", {
-                    method: "GET",
-                    credentials: "include",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
+      try {
+        const res = await fetch("http://localhost:4000/api/users", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-                if (!res.ok) {
-                    if (res.status === 401) {
-                        throw new Error("Unauthorized");
-                    }
-                    throw new Error("Failed to fetch");
-                }
+        const data = await res.json();
+        console.log(data);
 
-                const data = await res.json();
-                setConversations(data); // ✅ set fetched data
-                toast.success("Conversations loaded");
-            } catch (error) {
-                if (error.message === "Unauthorized") {
-                    toast.error("Please log in to see conversations.");
-                } else {
-                    toast.error("Failed to fetch conversations.");
-                }
-                console.error("Conversation fetch failed:", error.message);
-            } finally {
-                toast.dismiss();
-                setLoading(false);
-            }
-        };
+        const unique = Array.from(new Map(data.map(u => [u._id, u])).values());
 
-        getConversation();
-    }, []);
+        setConversations(prev => {
+          const prevIds = prev.map(u => u._id).sort().join(",");
+          const newIds = unique.map(u => u._id).sort().join(",");
+          return prevIds !== newIds ? unique : prev;
+        });
 
-    // ✅ Optional: log state change
-    useEffect(() => {
-        console.log("Updated conversations:", conversations);
-    }, [conversations]);
+      } catch (err) {
+        toast.error("Failed to fetch conversations");
+        console.error("Fetch error:", err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    return { loading, conversations };
+    getConversation();
+  }, []);
+
+  return { loading, conversations };
 };
 
 export default useGetConversation;

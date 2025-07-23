@@ -7,18 +7,23 @@ export const sendMessage = async (req, res) => {
     const { id: receiverId } = req.params;
     const senderId = req.user._id;
 
-    // Find or create conversation
+    console.log("message:", message);
+    console.log("senderId:", senderId);
+    console.log("receiverId:", receiverId);
+
     let conversation = await Conversation.findOne({
       participants: { $all: [senderId, receiverId], $size: 2 },
     });
 
     if (!conversation) {
+      console.log("No existing conversation. Creating one...");
       conversation = await Conversation.create({
         participants: [senderId, receiverId],
       });
     }
 
-    // Create message
+    console.log("Conversation ID:", conversation._id);
+
     const newMessage = await Message.create({
       senderId,
       receiverId,
@@ -26,16 +31,20 @@ export const sendMessage = async (req, res) => {
       conversationId: conversation._id,
     });
 
+    console.log("Message created:", newMessage);
+
     res.status(201).json({
       success: true,
       message: "Message sent successfully",
       data: newMessage,
     });
+
   } catch (error) {
-    console.error("Error in sendMessage controller:", error.message);
+    console.error(" Error in sendMessage controller:", error); // log full error
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 export const getMessages = async (req, res) => {
   try {
