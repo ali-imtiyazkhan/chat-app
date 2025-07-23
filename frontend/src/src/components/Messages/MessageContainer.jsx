@@ -1,21 +1,24 @@
-import React from 'react';
 import Messages from './Messages';
 import MessageInput from './MessageInput';
-
+import useConversation from "../../zustand/useConversation";
 
 const MessageContainer = () => {
-  const isNoChatSelected = false;
+  const { selectedConversation } = useConversation();
+
+  const isNoChatSelected = !selectedConversation || Object.keys(selectedConversation).length === 0;
 
   if (isNoChatSelected) {
     return <NoChatSelected />;
   }
 
   return (
-    <div className="md:min-w-[450px] flex flex-col h-screen ">
+    <div className="md:min-w-[450px] flex flex-col h-screen">
       {/* Header */}
-      <div className=" px-4 py-3 border-b  border-gray-600">
+      <div className="px-4 py-3 border-b border-gray-600">
         <span className="text-sm text-gray-400">To</span>{" "}
-        <span className="text-white font-semibold"><h1>John Doe</h1></span>
+        <span className="text-white font-semibold">
+          {selectedConversation.fullName}
+        </span>
       </div>
 
       {/* Messages */}
@@ -38,9 +41,10 @@ const NoChatSelected = () => {
       <div className="px-6 py-8 text-center sm:text-lg md:text-xl text-gray-300 font-semibold flex flex-col items-center gap-4 border border-gray-600 rounded-2xl shadow-xl backdrop-blur-sm">
         <div className="text-5xl">💬</div>
         <p className="text-2xl sm:text-3xl font-bold">Welcome Carter John</p>
-        <p className="text-sm sm:text-base text-gray-400">Select a conversation to start messaging</p>
+        <p className="text-sm sm:text-base text-gray-400">
+          Select a conversation to start messaging
+        </p>
       </div>
     </div>
   );
 };
-

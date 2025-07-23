@@ -27,9 +27,7 @@ const useGetConversation = () => {
                 }
 
                 const data = await res.json();
-                setConversations(data); 
-                console.log("data: ",data);
-                console.log("conversations: ", conversations)
+                setConversations(data); // ✅ set fetched data
                 toast.success("Conversations loaded");
             } catch (error) {
                 if (error.message === "Unauthorized") {
@@ -39,13 +37,18 @@ const useGetConversation = () => {
                 }
                 console.error("Conversation fetch failed:", error.message);
             } finally {
-                toast.dismiss(toastId);
+                toast.dismiss();
                 setLoading(false);
             }
         };
 
         getConversation();
     }, []);
+
+    // ✅ Optional: log state change
+    useEffect(() => {
+        console.log("Updated conversations:", conversations);
+    }, [conversations]);
 
     return { loading, conversations };
 };
