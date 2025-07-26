@@ -11,9 +11,9 @@ const Conversations = () => {
       {loading ? (
         <p className="text-gray-400 text-sm">Loading...</p>
       ) : (
-        conversations.map((conv, i) => (
-          <Conversation key={conv._id || i} conversation={conv} />
-        ))
+  
+          <Conversation />
+   
       )}
     </div>
   );

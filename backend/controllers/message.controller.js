@@ -35,7 +35,7 @@ export const sendMessage = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: "Message sent successfully",
+      message: newMessage.message,
       data: newMessage,
     });
 
@@ -66,7 +66,7 @@ export const getMessages = async (req, res) => {
     // Find messages by conversation ID
     const messages = await Message.find({ conversationId: conversation._id })
       .sort({ createdAt: 1 });
-
+    console.log("messages: ", messages)
     res.status(200).json({
       success: true,
       data: messages,
