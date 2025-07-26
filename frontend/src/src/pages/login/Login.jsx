@@ -27,7 +27,7 @@ export const Login = () => {
             <input
               type="text"
               placeholder="Enter your username"
-              className="input input-bordered w-full text-black"
+              className="input input-bordered w-full text-white"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -41,7 +41,7 @@ export const Login = () => {
             <input
               type="password"
               placeholder="Enter your password"
-              className="input input-bordered w-full text-black"
+              className="input input-bordered w-full text-white"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
