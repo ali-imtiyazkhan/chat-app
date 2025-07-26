@@ -1,5 +1,6 @@
 import Conversation from "../models/conversation.model.js";
 import Message from "../models/message.model.js";
+import { getReciverSocketId, io } from "../socket/socket.js";
 
 export const sendMessage = async (req, res) => {
   try {
@@ -33,6 +34,11 @@ export const sendMessage = async (req, res) => {
 
     console.log("Message created:", newMessage);
 
+    const reciverSocketId = getReciverSocketId(receiverId);
+    if (reciverSocketId) {
+      io.to(reciverSocketId).emit("newMessage", newMessage);
+    }
+
     res.status(201).json({
       success: true,
       message: newMessage.message,
@@ -40,7 +46,7 @@ export const sendMessage = async (req, res) => {
     });
 
   } catch (error) {
-    console.error(" Error in sendMessage controller:", error); // log full error
+    console.error("❌ Error in sendMessage controller:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -51,7 +57,6 @@ export const getMessages = async (req, res) => {
     const { id: userToChat } = req.params; 
     const senderId = req.user._id;
 
-    // Find the conversation between the two users
     const conversation = await Conversation.findOne({
       participants: { $all: [senderId, userToChat], $size: 2 },
     });
@@ -63,17 +68,17 @@ export const getMessages = async (req, res) => {
       });
     }
 
-    // Find messages by conversation ID
-    const messages = await Message.find({ conversationId: conversation._id })
-      .sort({ createdAt: 1 });
-    console.log("messages: ", messages)
+    const messages = await Message.find({ conversationId: conversation._id }).sort({ createdAt: 1 });
+
+    console.log("messages: ", messages);
+
     res.status(200).json({
       success: true,
       data: messages,
     });
 
   } catch (error) {
-    console.error("Error in getMessages controller:", error.message);
+    console.error("❌ Error in getMessages controller:", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
 };

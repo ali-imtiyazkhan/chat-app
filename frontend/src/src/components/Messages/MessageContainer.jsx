@@ -1,6 +1,7 @@
 import Messages from './Messages';
 import MessageInput from './MessageInput';
 import useConversation from "../../zustand/useConversation";
+import { useAuthContext } from '../../context/AuthContext';
 
 const MessageContainer = () => {
   const { selectedConversation } = useConversation();
@@ -36,11 +37,12 @@ export default MessageContainer;
 
 // No chat selected fallback component
 const NoChatSelected = () => {
+  const {authUser} = useAuthContext()
   return (
     <div className="flex items-center justify-center w-full h-screen">
       <div className="px-6 py-8 text-center sm:text-lg md:text-xl text-gray-300 font-semibold flex flex-col items-center gap-4 border border-gray-600 rounded-2xl shadow-xl backdrop-blur-sm">
         <div className="text-5xl">💬</div>
-        <p className="text-2xl sm:text-3xl font-bold">Welcome Carter John</p>
+        <p className="text-2xl sm:text-3xl font-bold">Welcome {authUser.fullName}</p>
         <p className="text-sm sm:text-base text-gray-400">
           Select a conversation to start messaging
         </p>
