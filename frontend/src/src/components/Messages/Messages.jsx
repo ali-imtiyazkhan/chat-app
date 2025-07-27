@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import useConversation from "../../zustand/useConversation";
 import useGetMessages from "../../hooks/useGetMessage";
 import useListenMessages from "../../hooks/useListenMessages";
+import useClearMessages from "../../hooks/useClearMessages";
 import { useAuthContext } from "../../context/AuthContext";
 
 const Messages = () => {
@@ -9,6 +10,7 @@ const Messages = () => {
   const { loading } = useGetMessages();
   useListenMessages();
   const { authUser } = useAuthContext();
+  const { clearMessages, loading: clearing } = useClearMessages();
 
   const bottomRef = useRef(null);
 
@@ -25,7 +27,19 @@ const Messages = () => {
   const validMessages = Array.isArray(messages) ? messages : [];
 
   return (
-    <div className="flex-1 overflow-y-auto p-4">
+    <div className="flex-1 overflow-y-auto p-4 relative">
+      {/* 🔴 Clear Messages Button */}
+      <div className="absolute top-2 right-4">
+        <button
+          onClick={clearMessages}
+          disabled={clearing}
+          className="bg-red-500 text-white px-3 py-1 text-sm rounded hover:bg-red-600"
+        >
+          {clearing ? "Clearing..." : "Clear Messages"}
+        </button>
+      </div>
+
+      {/* 🔵 Render Messages */}
       {validMessages.length > 0 ? (
         validMessages.map((msg, index) => {
           const fromMe = msg.senderId === authUser?._id;
@@ -49,7 +63,7 @@ const Messages = () => {
           );
         })
       ) : (
-        <p className="text-center text-gray-400">No messages yet</p>
+        <p className="text-center text-gray-400 mt-8">No messages yet</p>
       )}
 
       <div ref={bottomRef} />

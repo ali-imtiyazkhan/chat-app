@@ -82,3 +82,32 @@ export const getMessages = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+
+export const clearMessages = async (req, res) => {
+  try {
+    const { id: receiverId } = req.params;
+    const senderId = req.user._id;
+
+    const conversation = await Conversation.findOne({
+      participants: { $all: [senderId, receiverId], $size: 2 },
+    });
+
+    if (!conversation) {
+      return res.status(404).json({
+        success: false,
+        message: "No conversation found to clear.",
+      });
+    }
+
+    await Message.deleteMany({ conversationId: conversation._id });
+
+    res.status(200).json({
+      success: true,
+      message: "All messages cleared successfully.",
+    });
+  } catch (error) {
+    console.error("❌ Error in clearMessages controller:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
