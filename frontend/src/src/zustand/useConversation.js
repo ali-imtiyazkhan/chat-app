@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 const useConversation = create((set) => ({
   selectedConversation: null,
@@ -8,13 +8,9 @@ const useConversation = create((set) => ({
   messages: [],
   setMessages: (messages) => set({ messages }),
 
-  // ✅ Add this function to append a new message
-  addMessage: (msg) =>
-    set((state) => ({
-      messages: Array.isArray(state.messages)
-        ? [...state.messages, msg]
-        : [msg],
-    })),
+  // ✅ Add this function to append new messages
+  addMessage: (message) =>
+    set((state) => ({ messages: [...state.messages, message] })),
 }));
 
 export default useConversation;
