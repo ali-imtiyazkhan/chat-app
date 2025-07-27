@@ -7,18 +7,23 @@ const Messages = () => {
   const { messages } = useConversation();
   const { loading } = useGetMessages();
   useListenMessages();
+
   const bottomRef = useRef(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  if (loading) return <p className="text-center my-2 text-gray-500">Loading messages...</p>;
+  if (loading) {
+    return <p className="text-center my-2 text-gray-500">Loading messages...</p>;
+  }
+
+  const validMessages = Array.isArray(messages) ? messages : [];
 
   return (
     <div className="flex-1 overflow-y-auto p-4">
-      {messages?.length > 0 ? (
-        messages.map((msg, index) => (
+      {validMessages.length > 0 ? (
+        validMessages.map((msg, index) => (
           <div key={msg._id || `${msg.createdAt}-${index}`} className="mb-2">
             <div className="p-2 rounded bg-gray-100 dark:bg-gray-800 w-fit max-w-xs">
               <p>{msg.message}</p>
